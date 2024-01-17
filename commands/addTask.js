@@ -44,7 +44,7 @@ async function askQuestions() {
   return todoArray;
 }
 
-async function addTask() {
+export default async function addTask() {
   try {
     // call askQuestions() to get array of todos
     const userResponse = await askQuestions();
