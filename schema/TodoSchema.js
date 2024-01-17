@@ -25,7 +25,7 @@ const TodoSchema = new mongoose.Schema(
     code: {
       type: String,
       required: true,
-      defautl: "code",
+      default: "code",
       trim: true,
     },
   },
@@ -33,7 +33,7 @@ const TodoSchema = new mongoose.Schema(
 );
 
 // pre-save hook => runs everytime beore a task gets saved
-TodoSchema.pre("save", (next) => {
+TodoSchema.pre("save", function (next) {
   this.code = nanoid(10);
   next();
 });
