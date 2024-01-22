@@ -37,3 +37,68 @@ async function askUpdateQ(todo) {
     console.log("Something went wrong...\n", e);
   }
 }
+
+export default async function updateTask() {
+  try {
+    // obtaining the task code entered by user
+    const taskCode = await getTaskCode();
+
+    // connect to the database
+    await connectDB();
+
+    // start the spinner
+    const spinner = ora("Finding the todo...").start();
+
+    // find the todo which the user wants to update
+    const todo = Todos.findOne({ code: taskCode.code });
+
+    // end spinner
+    spinner.stop();
+
+    // check if todo exists
+    if (todo) {
+      console.log(
+        Chalk.blueBright(
+          "Type the updated properties. Press Enter if no update"
+        )
+      );
+
+      // get user updated information
+      const update = await askUpdateQ(todo);
+
+      // if user marked status as completed
+      // we delete the todo else we update the data
+      if (todo.status.toLowerCase() === "completed") {
+        // change spinner and start it again
+        spinner.text = "Deleting todo...";
+        spinner.start();
+
+        // delete todo
+        await Todos.deleteOne({ _id: todo._id });
+
+        // stop spinner and show complete message
+        spinner.stop();
+        console.log(chalk.greenBright("Deleted the todo"));
+      } else {
+        // update the todo
+        spinner.text = "updating todo...";
+        spinner.start();
+        await Todos.updateOne({ _id: todo._id }, update, {
+          runValidators: true,
+        });
+        spinner.stop();
+        console.log(chalk.greenBright("Todo updated"));
+      }
+    } else {
+      console.log(
+        chalk.redBright("Could not find Todo with code you provided.")
+      );
+    }
+
+    // disconnect database
+    await disconnectDB();
+  } catch (e) {
+    console.log("Something went wrong, Error: ", e);
+    process.exit(1);
+  }
+}
