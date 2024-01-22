@@ -47,10 +47,10 @@ export default async function updateTask() {
     await connectDB();
 
     // start the spinner
-    const spinner = ora("Finding the todo...").start();
+    const spinner = ora("Finding the todo...\n").start();
 
     // find the todo which the user wants to update
-    const todo = Todos.findOne({ code: taskCode.code });
+    const todo = await Todos.findOne({ code: taskCode.code });
 
     // end spinner
     spinner.stop();
@@ -58,7 +58,7 @@ export default async function updateTask() {
     // check if todo exists
     if (todo) {
       console.log(
-        Chalk.blueBright(
+        chalk.blueBright(
           "Type the updated properties. Press Enter if no update"
         )
       );
