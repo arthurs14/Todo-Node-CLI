@@ -17,7 +17,9 @@ npm install
 npm i -g .
 ```
 
-3. To run the commands
+3. You will need to include your own mongoDB url and create your own `.env` file and create an environment variable `MONGO_URI`: [Create MongoDB Cluster](https://www.mongodb.com/basics/clusters/mongodb-cluster-setup)
+
+4. To run the commands
 
 ```bash
 todo add
